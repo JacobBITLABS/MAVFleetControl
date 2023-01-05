@@ -11,12 +11,12 @@ class land:
 	# 	self.target = point
 	# 	self.tolerance = tolerance
 
-
 	async def __call__(self, drone):
 		# print(drone.conn.telemetry.armed)
 
 		await drone.land()
 		print("-- Land")
+	
 		# await drone.start_offboard()
 		# await drone.register_sensor("imu", drone.conn.telemetry.imu())
 		# await drone.register_sensor("ned", drone.conn.telemetry.position_velocity_ned())

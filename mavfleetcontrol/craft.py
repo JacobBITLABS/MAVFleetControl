@@ -40,7 +40,9 @@ class Craft(threading.Thread):
             self.loop.run_until_complete(self.connect())
             while True:
                 action = self.tasking.get()
+                print("ACTION: ", action)
                 if isinstance(action, str) and action == "exit":
+                    print("[INFO] exiting...")
                     break
                 # self.loop.run_until_complete(action(self))
                 with self.current_task_lock:
@@ -48,13 +50,13 @@ class Craft(threading.Thread):
                 try:
                     self.loop.run_until_complete(self.current_task)
                 except asyncio.CancelledError:
+                    print("[INFO] Asyncio Error")
                     pass
 
-                #clear the tasked sensors     
+                # clear the tasked sensors     
                 for task in self.sensors:
                 	task.cancel()
                 self.sensors = []
-
 
                 with self.current_task_lock:
                     self.current_task = None
@@ -62,18 +64,18 @@ class Craft(threading.Thread):
                 # if no tasks, aircraft will default to pix4 default maybe?
 
         finally:
+            print("[INFO] finally...")
             self.loop.run_until_complete(self.loop.shutdown_asyncgens())
-            self.loop.close()
-
-    # def close_conn(self):
+            self.loop.call_soon_threadsafe(self.loop.stop)
+            #self.loop.close()
 
     def add_action(self, action):
         self.tasking.put(action)
         # asyncio.run_coroutine_threadsafe(action(self),self.loop)
         # self.loop.call_soon_threadsafe(action,self)
 
-    def override_action(self, action):
-
+    def close_conn(self, action):
+        print("[INFO] Closing connection")
         with self.current_task_lock:
             self.tasking.queue.clear()
             # maybe add check to see if safe
@@ -83,6 +85,7 @@ class Craft(threading.Thread):
                 self.current_task.cancel()
 
     def close_conn(self):
+        print("[INFO] Closing connection")
         self.tasking.put("exit")
         # self.loop.stop()
 
@@ -118,8 +121,15 @@ class Craft(threading.Thread):
                 break
             else:
                 break
+
     async def land(self):
         await self.conn.action.land()
+        print("-- Landing in process")
+
+
+    async def land_and_close_conn(self):
+        await self.conn.action.land()
+
                    
     async def kill(self):
         async for arm in self.conn.telemetry.armed():
@@ -133,6 +143,7 @@ class Craft(threading.Thread):
                 break
             else:
                 break   
+
     async def start_offboard(self):
     	     # print("-- Starting offboard")
         try:
@@ -158,6 +169,14 @@ class Craft(threading.Thread):
             if state.is_connected:
                 print(f"{self.name}: connected!")
                 break
+
+    async def print_status_text(drone):
+        try:
+            async for status_text in drone.telemetry.status_text():
+                print(f"Status: {status_text.type}: {status_text.text}")
+        except asyncio.CancelledError:
+            return
+
 
     @property
     async def current_position(self) -> PositionNed:
