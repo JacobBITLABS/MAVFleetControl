@@ -10,7 +10,7 @@ class GoTo:
     async def __call__(self, drone):
       
         print("-- Fetching amsl altitude at home location....") # asml: above mean sea level
-        async for terrain_info in drone.telemetry.home():
+        async for terrain_info in drone.conn.telemetry.home():
             absolute_altitude = terrain_info.absolute_altitude_m
             break
         

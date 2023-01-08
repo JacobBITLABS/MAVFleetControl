@@ -1,3 +1,5 @@
+from craft import Craft
+from MAVFleetControl.mavfleetcontrol.actions.waitForAmbulance import WaitFor
 import geopy.distance
 import asyncio
 
@@ -10,8 +12,15 @@ class WaitFor:
     def dist(self, a, b):
         return geopy.distance.geodesic((a.latitude_deg, a.longitude_deg), (b.latitude_deg, b.longitude_deg)).m
 
-    async def __call__(self, drone):
+    async def __call__(self, drone: Craft):
         while True:
+            if not drone.conn.telemetry.health_all_ok:
+                print("-- drone ", drone.id, " is having issues aborting")
+                drone.tasking.empty() # empty event loop
+                drone.add_action()
+
+                break
+
             # test drones
             for other_drone in self.all_drones:
                 # test that it is not the drone it self
@@ -25,4 +34,4 @@ class WaitFor:
                 await asyncio.sleep(0.2) # sleep for 0.2 second
             else:
                 break
-        
+                
