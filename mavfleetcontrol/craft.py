@@ -1,12 +1,23 @@
 """
 Bla
 """
+from enum import Enum
 from typing import Callable, Awaitable, List
 import threading
 import functools
 import queue
 import asyncio
 import random
+
+#State of the drone
+class State(Enum):
+	Start = 1 #Startup sequence
+	Follow = 2
+	FollowMission = 3
+	Travel = 4 #Normal travel
+	TravelWait = 5 #Is decending to waypoint
+	Wait = 6 #Is at a waypoint
+	End = 7 #At the end
 
 from mavsdk import System
 from mavsdk.offboard import Attitude, PositionNedYaw, OffboardError
@@ -25,6 +36,7 @@ class Craft(threading.Thread):
         super().__init__()
         self.id: str = id
         self.mission_id = mission_id
+        self.state = State.Start
         self.conn: System = None
         self.address: str = connection_address
         self.action: Callable[["Craft"], Awaitable[None]] = action

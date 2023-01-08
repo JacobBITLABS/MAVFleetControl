@@ -1,8 +1,10 @@
 from craft import Craft
+from craft import State
 from MAVFleetControl.mavfleetcontrol.actions.waitForAmbulance import WaitFor
 from  MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
 import geopy.distance
 import asyncio
+
 
 class WaitFor:
     def __init__(self, ambulance, drones, all_drones):
@@ -24,7 +26,7 @@ class WaitFor:
             # test drones
             for other_drone in self.all_drones:
                 # test that it is not the drone it self
-                if not drone.id == other_drone.id and not drone.mission_id == other_drone.mission_id:
+                if not drone.id == other_drone.id and not drone.mission_id == other_drone.mission_id and drone.state is State.Wait: # drone need to be waiting to be pushed
                     # test distance
                     if self.dist(drone.position, other_drone.position) < 5.0:
                         break # next waypoint pushed off the pin
