@@ -12,26 +12,29 @@ from mavsdk import System
 from mavsdk.offboard import Attitude, PositionNedYaw, OffboardError
 from mavsdk.telemetry import PositionNed
 import numpy as np
-
+from states.position import Position
 
 class Craft(threading.Thread):
     def __init__(
         self,
         id: int,
         connection_address: str,
+        mission_id = None,
         action: Callable[["Craft"], Awaitable[None]] = None,
     ):
         super().__init__()
         self.id: str = id
+        self.mission_id = mission_id
         self.conn: System = None
         self.address: str = connection_address
         self.action: Callable[["Craft"], Awaitable[None]] = action
-        # self.loop = None
         self.loop = asyncio.new_event_loop()
         self.tasking = queue.Queue()
         self.current_task = None
         self.current_task_lock = threading.Lock()
-        self.sensors = []
+        self.sens
+        self.position = None
+        self.ambulance_position = None
 
     def run(self):
         # self.loop = asyncio.new_event_loop()
@@ -55,7 +58,7 @@ class Craft(threading.Thread):
 
                 # clear the tasked sensors     
                 for task in self.sensors:
-                	task.cancel()
+                    task.cancel()
                 self.sensors = []
 
                 with self.current_task_lock:
@@ -145,7 +148,7 @@ class Craft(threading.Thread):
                 break   
 
     async def start_offboard(self):
-    	     # print("-- Starting offboard")
+             # print("-- Starting offboard")
         try:
             await self.conn.offboard.start()
             return True
@@ -190,8 +193,8 @@ class Craft(threading.Thread):
             )
 
     async def register_sensor(self,name:str,waitable:Awaitable):
-    	async def _sensor():
-    		async for x in waitable:
-    			setattr(self,name,x)
-    	setattr(self,name,None)
-    	self.sensors.append(asyncio.ensure_future(_sensor(),loop = self.loop))
+        async def _sensor():
+            async for x in waitable:
+                setattr(self,name,x)
+        setattr(self,name,None)
+        self.sensors.append(asyncio.ensure_future(_sensor(),loop = self.loop))
