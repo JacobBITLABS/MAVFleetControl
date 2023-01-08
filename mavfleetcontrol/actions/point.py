@@ -32,7 +32,7 @@ class FlyToPoint:
 		await drone.conn.offboard.set_position_ned(PositionNedYaw(*self.target, 0.0))
 
 		async for position_ned in drone.conn.telemetry.position_velocity_ned():
-			position = np.array([position_ned.position.north_m,position_ned.position.east_m,position_ned.position.down_m])
+			position = np.array([position_ned.position.north_m, position_ned.position.east_m, position_ned.position.down_m])
 			if distance_between(self.target, position) < self.tolerance:
 				print(f"-- Arrived @ {self.target[0]}m North, {self.target[1]}m East, {self.target[2]}m Down within local coordinate system")
 				break
