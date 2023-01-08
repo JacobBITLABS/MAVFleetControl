@@ -6,7 +6,6 @@ from mavfleetcontrol.actions.land import land
 
 if __name__ == "__main__":
 
-
 	drone1 = Craft("drone1", "udp://:14540")
 	drone2 = Craft("drone2", "udp://:14541")
 

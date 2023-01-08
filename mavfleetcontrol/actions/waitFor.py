@@ -19,7 +19,7 @@ class WaitFor:
                     # test distance
                     if self.dist(drone.position, other_drone.position) < 5.0:
                         break # next waypoint pushed off the pin
-            
+
             # test ambulances
             if self.dist(drone.position, self.ambulance.position) > 5.0:
                 await asyncio.sleep(0.2) # sleep for 0.2 second
