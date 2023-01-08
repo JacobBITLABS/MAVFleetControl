@@ -23,6 +23,15 @@ class GoTo:
             # wait for takeoff
             await asyncio.sleep(1)
 
+        print("-- Starting offboard")
+        try:
+            await drone.conn.offboard.start()
+        except Exception as error:
+            print(f"Starting offboard mode failed with error code: {error._result.result}")
+            print("-- Disarming")
+            await drone.conn.action.disarm()
+            return
+
         drone.state = State.Travel
         # To fly drone 20m above the ground plane
         flying_alt = absolute_altitude + self.altitude # default 20.0

@@ -26,7 +26,7 @@ class WaitFor:
             # test drones
             for other_drone in self.all_drones:
                 # test that it is not the drone it self
-                if not drone.id == other_drone.id and not drone.mission_id == other_drone.mission_id and drone.state is State.Wait: # drone need to be waiting to be pushed
+                if not drone.id == other_drone.id and not drone.mission_id == other_drone.mission_id and drone.state is State.Wait: # drone need to be waiting to be pusheds
                     # test distance
                     if self.dist(drone.position, other_drone.position) < 5.0:
                         break # next waypoint pushed off the pin
