@@ -17,12 +17,12 @@ import numpy as np
 class Craft(threading.Thread):
     def __init__(
         self,
-        name: str,
+        id: int,
         connection_address: str,
         action: Callable[["Craft"], Awaitable[None]] = None,
     ):
         super().__init__()
-        self.name: str = name
+        self.id: str = id
         self.conn: System = None
         self.address: str = connection_address
         self.action: Callable[["Craft"], Awaitable[None]] = action
