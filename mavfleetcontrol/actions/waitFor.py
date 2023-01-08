@@ -1,5 +1,6 @@
 from craft import Craft
 from MAVFleetControl.mavfleetcontrol.actions.waitForAmbulance import WaitFor
+from  MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
 import geopy.distance
 import asyncio
 
@@ -17,8 +18,7 @@ class WaitFor:
             if not drone.conn.telemetry.health_all_ok:
                 print("-- drone ", drone.id, " is having issues aborting")
                 drone.tasking.empty() # empty event loop
-                drone.add_action()
-
+                drone.add_action(Emergency())
                 break
 
             # test drones
