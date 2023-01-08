@@ -22,7 +22,7 @@ class FlyToPoint:
 		print("-- Starting offboard")
 		try:
 			await drone.conn.offboard.start()
-		except Error as error:
+		except Exception as error:
 			print(f"Starting offboard mode failed with error code: {error._result.result}")
 			print("-- Disarming")
 			await drone.conn.action.disarm()
