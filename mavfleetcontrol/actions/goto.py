@@ -40,8 +40,6 @@ class GoTo:
         longitude_deg = self.position[1]
         await drone.action.goto_location(latitude_deg, longitude_deg, flying_alt, 0)
 
-        drone.state = State.Wait
-
         # while True:
         #     print("Staying connected, press Ctrl-C to exit")
         #     await asyncio.sleep(1)

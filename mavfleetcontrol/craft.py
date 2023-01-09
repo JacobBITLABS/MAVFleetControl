@@ -9,7 +9,7 @@ import queue
 import asyncio
 import random
 
-#State of the drone
+# State of the drone
 class State(Enum):
 	Start = 1 #Startup sequence
 	Follow = 2
