@@ -23,7 +23,7 @@ from mavsdk import System
 from mavsdk.offboard import Attitude, PositionNedYaw, OffboardError
 from mavsdk.telemetry import PositionNed
 import numpy as np
-from states.position import Position
+from MAVFleetControl.mavfleetcontrol.states.position import Position
 
 class Craft(threading.Thread):
     def __init__(
@@ -44,7 +44,7 @@ class Craft(threading.Thread):
         self.tasking = queue.Queue()
         self.current_task = None
         self.current_task_lock = threading.Lock()
-        self.sens
+        self.sensors = []
         self.position = None
         self.ambulance_position = None
 

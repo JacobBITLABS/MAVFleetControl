@@ -1,6 +1,5 @@
-from craft import Craft
-from craft import State
-from MAVFleetControl.mavfleetcontrol.actions.waitForAmbulance import WaitFor
+from MAVFleetControl.mavfleetcontrol.craft import Craft
+from MAVFleetControl.mavfleetcontrol.craft import State
 from  MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
 import geopy.distance
 import asyncio

@@ -1,7 +1,7 @@
 import asyncio
 from mavsdk import System
-from craft import Craft
-from craft import State
+from MAVFleetControl.mavfleetcontrol.craft import Craft
+from MAVFleetControl.mavfleetcontrol.craft import State
 
 class GoTo:
     def __init__(self, position, altitude=12.0):
@@ -15,11 +15,11 @@ class GoTo:
             break
         
         # if drone is not flying
-        if not drone.telemetry.in_air():
+        if not drone.conn.telemetry.in_air():
             print("-- Arming")
-            await drone.action.arm()
+            await drone.conn.action.arm()
             print("-- Taking off")
-            await drone.action.takeoff()
+            await drone.conn.action.takeoff()
             # wait for takeoff
             await asyncio.sleep(1)
 
@@ -38,7 +38,7 @@ class GoTo:
         # goto_location() takes Absolute MSL altitude
         latitude_deg = self.position[0]
         longitude_deg = self.position[1]
-        await drone.action.goto_location(latitude_deg, longitude_deg, flying_alt, 0)
+        await drone.conn.action.goto_location(latitude_deg, longitude_deg, flying_alt, 0)
 
         # while True:
         #     print("Staying connected, press Ctrl-C to exit")
