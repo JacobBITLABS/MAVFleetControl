@@ -12,7 +12,7 @@ class WaitFor:
         self.all_drones = all_drones
 
     def dist(self, a, b):
-        return geopy.distance.geodesic((a.latitude_deg, a.longitude_deg), (b.latitude_deg, b.longitude_deg)).m
+        return geopy.distance.geodesic((a.lat, a.lng), (b.lat, b.lng)).m
 
     async def __call__(self, drone: Craft):
         drone.state = State.Wait # change state

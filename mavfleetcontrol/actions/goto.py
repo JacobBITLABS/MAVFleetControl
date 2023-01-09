@@ -25,7 +25,8 @@ class GoTo:
 
         print("-- Starting offboard")
         try:
-            await drone.conn.offboard.start()
+            #await drone.conn.offboard.start()
+            pass
         except Exception as error:
             print(f"Starting offboard mode failed with error code: {error._result.result}")
             print("-- Disarming")
