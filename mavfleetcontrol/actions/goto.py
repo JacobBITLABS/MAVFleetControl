@@ -13,17 +13,19 @@ class GoTo:
         async for terrain_info in drone.conn.telemetry.home():
             absolute_altitude = terrain_info.absolute_altitude_m
             break
-        
+
         # if drone is not flying
         #if not drone.conn.telemetry.in_air():
-        if not drone.armed:
+        async for is_armed in drone.conn.telemetry.in_air():
+            if is_armed:
+                break
+
             print("-- Arming")
             await drone.conn.action.arm()
             print("-- Taking off")
             await drone.conn.action.takeoff()
             # wait for takeoff
             await asyncio.sleep(1)
-            drone.armed = True
 
         print("-- Starting offboard")
         try:
