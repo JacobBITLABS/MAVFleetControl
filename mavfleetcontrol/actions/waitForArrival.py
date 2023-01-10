@@ -9,13 +9,14 @@ class WaitForArrival:
     def __init__(self, position: Position, drone: Craft):
         self.position = position
         self.drone = drone
-        self.tolerance = 5.0 # 5 meters tolerence
+        self.tolerance = 3.0 # 5 meters tolerence
 
     def dist(self, a: Position, b: Position):
-        return geopy.distance.geodesic((a.lat, a.lng), (b.lng, b.lng)).m
+        return geopy.distance.distance((a.lat, a.lng), (b.lat, b.lng)).m
 
     async def __call__(self, drone: Craft):
         drone.state = State.Travel # maybe this should be something different???
+        print("WaitForArrival")
         while True:
             if not drone.conn.telemetry.health_all_ok:
                 print("-- drone ", drone.id, " is having issues aborting")
@@ -25,7 +26,8 @@ class WaitForArrival:
 
             if self.dist(drone.position, self.position) > self.tolerance:
                 # drone.state = State.Travel
-                await asyncio.sleep(0.5) # sleep for 0.2 second
+                #print("WaitForArrival dist: ", self.dist(drone.position, self.position))
+                await asyncio.sleep(2) # sleep for 0.2 second
             else:
                 drone.state = State.Wait # is at a waypoint
                 break

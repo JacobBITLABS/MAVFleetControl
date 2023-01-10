@@ -16,15 +16,21 @@ class GoTo:
 
         # if drone is not flying
         #if not drone.conn.telemetry.in_air():
-        async for is_armed in drone.conn.telemetry.in_air():
-            if is_armed:
+        async for in_air in drone.conn.telemetry.in_air():
+            if in_air:
                 break
 
-            print("-- Arming")
-            await drone.conn.action.arm()
-            print("-- Taking off")
-            await drone.conn.action.takeoff()
-            # wait for takeoff
+            #try:
+            if True:
+                print("-- Arming")
+                await drone.conn.action.arm()
+                print("-- Taking off")
+                await drone.conn.action.takeoff()
+                # wait for takeoff
+                await asyncio.sleep(20)
+            #except Exception as e:
+            #    print("Goto failed: ", e)
+
             await asyncio.sleep(1)
 
         print("-- Starting offboard")

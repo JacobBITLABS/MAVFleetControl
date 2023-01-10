@@ -1,3 +1,4 @@
+from MAVFleetControl.mavfleetcontrol.craft import State
 from MAVFleetControl.mavfleetcontrol.craft import Craft
 from mavsdk import System
 import numpy as np
@@ -16,6 +17,7 @@ class land:
 
 		await drone.land()
 		print("-- Land")
+		drone.state = State.End # End drone state, stop background position tracking
 	
 		# await drone.start_offboard()
 		# await drone.register_sensor("imu", drone.conn.telemetry.imu())

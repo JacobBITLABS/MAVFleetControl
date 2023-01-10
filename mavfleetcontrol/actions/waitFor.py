@@ -12,10 +12,12 @@ class WaitFor:
         self.all_drones = all_drones
 
     def dist(self, a, b):
-        return geopy.distance.geodesic((a.lat, a.lng), (b.lat, b.lng)).m
+        return geopy.distance.distance((a.lat, a.lng), (b.lat, b.lng)).m
 
     async def __call__(self, drone: Craft):
         drone.state = State.Wait # change state
+        #TODO: Move down
+        print("WaitFor")
         while True:
             if not drone.conn.telemetry.health_all_ok:
                 print("-- drone ", drone.id, " is having issues aborting")
@@ -33,7 +35,8 @@ class WaitFor:
 
             # test ambulances
             if self.dist(drone.position, self.ambulance.position) > 5.0:
-                await asyncio.sleep(0.2) # sleep for 0.2 second
+                print("WaitFor dist: ", self.dist(drone.position, self.ambulance.position))
+                await asyncio.sleep(2) # sleep for 0.2 second
             else:
                 drone.state = State.Travel
                 break

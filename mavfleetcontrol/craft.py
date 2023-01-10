@@ -45,7 +45,6 @@ class Craft(threading.Thread):
         self.current_task = None
         self.current_task_lock = threading.Lock()
         self.sensors = []
-        self.armed = False
         self.position = None
         self.ambulance_position = None
 
@@ -185,6 +184,8 @@ class Craft(threading.Thread):
             if state.is_connected:
                 print(f"{self.name}: connected!")
                 break
+
+        await self.conn.action.set_maximum_speed(40)
 
     async def print_status_text(drone):
         try:
