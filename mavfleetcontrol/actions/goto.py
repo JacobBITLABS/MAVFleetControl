@@ -15,13 +15,15 @@ class GoTo:
             break
         
         # if drone is not flying
-        if not drone.conn.telemetry.in_air():
+        #if not drone.conn.telemetry.in_air():
+        if not drone.armed:
             print("-- Arming")
             await drone.conn.action.arm()
             print("-- Taking off")
             await drone.conn.action.takeoff()
             # wait for takeoff
             await asyncio.sleep(1)
+            drone.armed = True
 
         print("-- Starting offboard")
         try:
@@ -40,6 +42,7 @@ class GoTo:
         latitude_deg = self.position[0]
         longitude_deg = self.position[1]
         await drone.conn.action.goto_location(latitude_deg, longitude_deg, flying_alt, 0)
+        print("GOTO", latitude_deg, longitude_deg, flying_alt)
 
         # while True:
         #     print("Staying connected, press Ctrl-C to exit")

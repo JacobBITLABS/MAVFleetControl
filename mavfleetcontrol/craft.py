@@ -45,6 +45,7 @@ class Craft(threading.Thread):
         self.current_task = None
         self.current_task_lock = threading.Lock()
         self.sensors = []
+        self.armed = False
         self.position = None
         self.ambulance_position = None
 

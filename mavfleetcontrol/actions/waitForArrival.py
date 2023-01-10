@@ -1,9 +1,9 @@
 import geopy.distance
 import asyncio
-from craft import Craft
-from craft import State
-from states.position import Position
-from  MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
+from MAVFleetControl.mavfleetcontrol.craft import Craft
+from MAVFleetControl.mavfleetcontrol.craft import State
+from MAVFleetControl.mavfleetcontrol.states.position import Position
+from MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
 
 class WaitForArrival:
     def __init__(self, position: Position, drone: Craft):
