@@ -52,6 +52,9 @@ class Craft(threading.Thread):
         self.ambulance_position = None
 
     def run(self):
+        """
+            An infinite loop listening for queued actions
+        """
         try:
             self.loop.run_until_complete(self.connect())
             while True:
