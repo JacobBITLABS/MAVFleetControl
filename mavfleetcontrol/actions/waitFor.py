@@ -6,6 +6,9 @@ import asyncio
 
 
 class WaitFor:
+    """
+        Class responsible for waiting for an ambulance to reach a drones position
+    """
     def __init__(self, ambulance, drones, all_drones):
         self.ambulance = ambulance
         self.drones = drones
@@ -16,7 +19,6 @@ class WaitFor:
 
     async def __call__(self, drone: Craft):
         drone.state = State.Wait # change state
-        #TODO: Move down
         print("WaitFor")
         while True:
             if not drone.conn.telemetry.health_all_ok:

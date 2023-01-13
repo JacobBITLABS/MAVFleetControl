@@ -6,6 +6,9 @@ from MAVFleetControl.mavfleetcontrol.states.position import Position
 from MAVFleetControl.mavfleetcontrol.actions.emergency import Emergency
 
 class WaitForArrival:
+    """
+        Class responsible for waiting for a drone to reach its desired location
+    """
     def __init__(self, position: Position, drone: Craft):
         self.position = position
         self.drone = drone
@@ -25,8 +28,6 @@ class WaitForArrival:
                 break
 
             if self.dist(drone.position, self.position) > self.tolerance:
-                # drone.state = State.Travel
-                #print("WaitForArrival dist: ", self.dist(drone.position, self.position))
                 await asyncio.sleep(2) # sleep for 0.2 second
             else:
                 drone.state = State.Wait # is at a waypoint
