@@ -28,7 +28,7 @@ class GoTo:
             print("-- Taking off")
             await drone.conn.action.takeoff()
             # Wait for takeoff
-            await asyncio.sleep(20)
+            await asyncio.sleep(50)
 
         drone.state = State.Travel
         # To fly drone 20m above the ground plane
